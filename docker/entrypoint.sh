@@ -1,10 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
-downgrade() {
-    curl -L https://archive.archlinux.org/packages/b/binutils/binutils-2.43_1%2Br186%2Bg61f8adadd6db-1-x86_64.pkg.tar.zst -o /tmp/binutils.pkg.tar.zst
-    pacman -U --noconfirm /tmp/binutils.pkg.tar.zst
-    rm -rf /tmp/binutils.pkg.tar.zst
+use_new_ld() {
+    rm /usr/bin/ld
 }
 
 vcpkg_bootstrap() {
@@ -39,16 +37,18 @@ main() {
 
     if [ ! -z "$1" ]; then
         case $1 in
-            upgrade)
+            ld-2.43)
                 # Do nothing, as the latest version is already installed.
                 ;;
-            downgrade)
-                downgrade
+            ld-2.44)
+                use_new_ld
                 ;;
             *)
                 echo "Invalid argument: '$1'"
                 exit 1
         esac
+    else
+        use_new_ld
     fi
     vcpkg_bootstrap ${VCPGK_RELEASE}
     vcpkg_install
