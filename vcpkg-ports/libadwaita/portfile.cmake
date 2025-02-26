@@ -15,7 +15,7 @@ vcpkg_configure_meson(
     SOURCE_PATH ${SOURCE_PATH}
     OPTIONS
         -Dintrospection=disabled
-        -Dtests=false
+        -Dtests=true
         -Dgtk_doc=false
         -Dexamples=true
         -Dvapi=false
